@@ -1,0 +1,29 @@
+# Build artifacts
+output/
+*.conda
+*.tar.bz2
+
+# Rattler build cache
+build_cache/
+
+# Pixi environment (if used locally)
+.pixi/
+pixi.lock
+
+# Backup files
+*.bak
+*.orig
+*~
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test artifacts
+test/

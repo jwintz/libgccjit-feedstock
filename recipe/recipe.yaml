@@ -1,0 +1,68 @@
+context:
+  name: libgccjit
+  version: "15.2.0"
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://ftpmirror.gnu.org/gnu/gcc/gcc-${{ version }}/gcc-${{ version }}.tar.xz
+  sha256: 438fd996826b0c82485a29da03a72d71d6e3541a83ec702df4271f6fe025d24e
+  patches:
+    - patches/gcc-15.1.0.diff
+
+build:
+  number: 23
+  script: build.sh
+  skip: win
+  # Note: do NOT ignore libgccjit.0.dylib for prefix detection.
+  # GCC embeds standard_exec_prefix, standard_libexec_prefix etc. as
+  # hardcoded C strings. These must be rewritten from the build-time
+  # placeholder to the install prefix so the embedded driver can find
+  # cc1, collect2, libemutls_w.a, etc.
+
+requirements:
+  build:
+    # Conda-forge builds GCC with clang on macOS (same as their ctng-compilers
+    # feedstock). The targetm BSS issue is fixed via section attribute in build.sh.
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - make
+    - if: osx
+      then: sed
+  host:
+    - gmp
+    - mpfr
+    - mpc
+    - isl
+    - zlib
+    - zstd
+  run:
+    - gmp
+    - mpfr
+    - mpc
+    - isl
+    - zlib
+    - zstd
+  run_exports:
+    - ${{ pin_subpackage(name, upper_bound='x') }}
+
+tests:
+  - script:
+      - test -f ${PREFIX}/include/libgccjit.h
+      - test -f ${PREFIX}/lib/libgccjit${SHLIB_EXT}
+      - test -f ${PREFIX}/include/libgccjit++.h
+
+about:
+  homepage: https://gcc.gnu.org/
+  license: GPL-3.0-or-later WITH GCC-exception-3.1
+  license_file: COPYING3
+  summary: JIT library for the GNU compiler collection
+  description: |
+    The GNU Compiler Collection (GCC) includes a JIT library, libgccjit.
+    This library allows you to generate machine code at runtime using the GCC back-end.
+
+extra:
+  recipe-maintainers:
+    - jwintz

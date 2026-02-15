@@ -1,0 +1,21 @@
+--- a/include/safe-ctype.h
++++ b/include/safe-ctype.h
+@@ -120,6 +120,10 @@ So we include ctype.h here and then immediately redefine its macros.  */
+ 
+ #include <ctype.h>
++
++/* Poison standard ctype macros - but not for C++ to avoid conflicts.  */
++#ifndef __cplusplus
++
+ #undef isalpha
+ #define isalpha(c) do_not_use_isalpha_with_safe_ctype
+ #undef isalnum
+@@ -143,6 +147,9 @@ So we include ctype.h here and then immediately redefine its macros.  */
+ #define toupper(c) do_not_use_toupper_with_safe_ctype
+ #undef tolower
+ #define tolower(c) do_not_use_tolower_with_safe_ctype
++
++#endif /* !__cplusplus */
++
+ 
+ #endif /* SAFE_CTYPE_H */
