@@ -5,12 +5,13 @@ A feedstock for `libgccjit` on macOS ARM64.
 ## Channel
 
 The package is available on the following channel:
-[https://prefix.dev/channels/jwintz](https://prefix.dev/channels/jwintz)
+[https://prefix.dev/jwintz](https://prefix.dev/jwintz)
 
 ## Installation
 
 ```bash
-pixi add -c https://prefix.dev/channels/jwintz -c conda-forge libgccjit
+pixi workspace channel add --prepend https://prefix.dev/jwintz
+pixi add libgccjit
 ```
 
 ## Build
